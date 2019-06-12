@@ -1,0 +1,63 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %} {{product.product_name}} {% endblock %}
+
+{% block body %}
+
+<div class="container">
+	<div class="row my-5">
+	<div class="col-md-4">
+	<div class="row my-4">
+		<img src="/media/{{product.image}}" width="233px" height="385px">
+	</div>
+	<div class="row">
+		<button class="btn btn-primary mx-2">Buy Now</button>
+		<button class="btn btn-primary">Add To Cart</button>
+	</div>
+</div>
+<div class="col-md-8">
+	<h6>{{product.product_name}}</h6>
+	<p><b>Rs. {{product.price}}</b>
+	</p>
+	<p>
+		{{product.product_desc}}
+	</p>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+  console.log('Working');
+  //if cart not exist, don't load but make a blank cart instead
+  if(localStorage.getItem('cart') == null) {
+    var cart = {}
+  } else {
+    //if cart exists, do load it and parse
+    cart = JSON.parse(localStorage.getItem('cart'));
+
+    document.getElementById('cart').innerHTML = Object.keys(cart).length;
+  }
+
+  $('.cart').click(function() {
+    console.log('cicked');
+    //save button id into string
+    var idstr = this.id.toString();
+    console.log(idstr);
+    //if cart doesn't have item that user clicked then make 1 as cart[idstr] = 1
+    //or if already in cart
+    if(cart[idstr] != undefined) {
+      cart[idstr] = cart[idstr] + 1;
+    } else {
+      cart[idstr] = 1;
+    }
+      console.log(cart);
+      localStorage.setItem('cart', JSON.stringify(cart));
+  });
+
+  $('#popcart').popover()
+  document.getElementById("popcart").setAttribute('data-content', '<h6>Your Cart</h6>');
+</script>
+{% endblock %}
